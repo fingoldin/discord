@@ -1,0 +1,146 @@
+.messages-main {
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: #222;
+	display: table;
+	table-layout: fixed;
+}
+
+.body-nickname .messages-main {
+	display: none;
+}
+
+.messages-tab, .messages-cont {
+	display: table-cell;
+	overflow: hidden;
+}
+
+.messages-tab {
+	width: 400px;
+	height: 100%;
+	background-color: #1d1d1d;
+	border-right: 2px solid #000;
+	z-index: 10;
+}
+
+.messages-cont {
+	width: 100%;
+	height: 100%;
+	z-index: 5;
+	background-color: #222;
+	padding: 30px;
+	padding-bottom: 55px;
+	position: relative;
+}
+
+.messages-form, .messages-input, .message-list-wrap, .messages-cont {
+	box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+}
+
+.messages-form {
+	position: absolute;
+	width: 100%;
+	height: auto;
+	left: 0;
+	bottom: 0;
+	padding: 2px;
+	padding-right: 1px;
+}
+
+.messages-input {
+	padding: 12px;
+	text-align: left;
+	font-size: 22px;
+	width: 100%;
+	border: 1px solid #666;
+	background-color: #0d0d0d;
+	color: #eee;
+	outline: 0;
+}
+
+.messages-input:focus {
+	border-width: 3px;
+	padding: 10px;
+}
+
+.message-list-wrap {
+	overflow-x: hidden;
+	overflow-y: auto;
+	width: 100%;
+	height: 100%;
+	padding: 5px;
+}
+
+.messages-list {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}
+
+.message-li {
+	display: block;
+	height: auto;
+	margin-top: 15px;
+	margin-bottom: 15px;
+}	
+
+.message-li, .message-text {
+	transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+	-webkit-transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.message-loading {
+	transform: translate(-5px, 0);
+	opacity: 0.5;
+}
+
+.message-profile {
+	padding: 10px;
+	vertical-align: top;
+	width: 60px;
+}
+
+.message-img {
+	border-radius: 50%;
+	width: 50px;
+	height: 50px;
+}
+
+.message-wrapper {
+	display: table;
+	width: 100%;
+	table-layout: fixed;
+}
+
+.message-body, .message-profile {
+	display: table-cell;
+	overflow: hidden;
+}
+
+.message-body {
+	padding: 10px;
+	width: 100%;
+}
+
+.message-name, .message-text {
+	display: block;
+}
+
+.message-name {
+	color: #eee;
+	font-size: 22px;
+	font-weight: 700;
+	margin-bottom: 10px;
+}
+
+.message-text {
+	color: #aaa;
+	font-size: 18px;
+	word-wrap: break-word;
+	margin-top: 15px;
+}

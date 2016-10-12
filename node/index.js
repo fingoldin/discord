@@ -1,6 +1,8 @@
-var app = require("express")();
+var express = require("express");
+var app = express();
 //app.use(express.cookieParser());
 //app.use(express.session({secret: "a8yvna9dytvnaio"}));
+app.use(express.static("public"));
 
 var http = require("http").Server(app);
 

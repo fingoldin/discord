@@ -4,202 +4,17 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
+<script src="/nickname.js"></script>
+<script src="/messages.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/nickname.css"></link>
+<link rel="stylesheet" type="text/css" href="/messages.css"></link>
+<link rel="stylesheet" type="text/css" href="/general.css"></link>
 
 <style>
 
 body {
 	margin: 0;
-}
-
-.body-nickname {
-	overflow: hidden;
-}
-
-.nickname-main {
-	position: fixed;
-	background-color: #111;
-	width: 100%;
-	height: 100%;
-	z-index: 999;
-	display: none;
-	opacity: 0;
-	transition: opacity 1s;
-	-webkit-transition: opacity 1s;
-}
-
-.body-nickname .nickname-main {
-	display: block;
-	opacity: 1;
-}
-
-.body-transition .nickname-main {
-	display: block;
-	opacity: 0;
-}
-
-.nickname-form {
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 300px;
-	width: 550px;
-	height: auto;
-}
-
-.nickname-header {
-	padding: 20px;
-	text-align: center;
-}
-
-.nickname-choose {
-	color: #efffef;
-	font-size: 40px;
-	font-weight: 200;
-}
-
-.nickname-nickname {
-	padding: 30px 60px;
-	position: relative;
-}
-
-.nickname-input {
-	width: 92%;
-	padding: 4%;
-	font-size: 25px;
-	border: none;
-	color: #eee;
-	outline: none;
-	text-align: center;
-	background-color: #111;
-	transition: opacity 0.4s;
-	-webkit-transition: opacity 0.4s;
-}
-
-.nickname-input-bord {
-	background-color: purple;
-	height: 6px;
-	width: 70%;
-	margin-left: 15%;
-	transition: width 0.4s ease-in-out, margin 0.4s ease-in-out;
-	-webkit-transition: width 0.4s ease-in-out, margin 0.4s ease-in-out;
-	transition-delay: 0.2s;
-}
-
-.nickname-input:hover {
-	cursor: text;
-}
-
-.nickname-input-bord-h {
-	width: 0%;
-	margin-left: 50%;
-}
-
-.nickname-input-d {
-	opacity: 0;
-}
-
-.nickname-input-d + .nickname-loader {
-	opacity: 1;
-}
-
-.nickname-input-d ~ .nickname-input-bord {
-	width: 0%;
-	margin-left: 50%;
-}
-
-.nickname-input:focus ~ .nickname-input-bord {
-	width: 94%;
-	margin-left: 3%;
-}
-
-.nickname-input-d:focus ~ .nickname-input-bord {
-	width: 0%;
-	margin-left: 50%;
-}
-
-.nickname-input::-webkit-input-placeholder { -webkit-transition: opacity 0.4s; }
-.nickname-input:-moz-placeholder { -moz-transition: opacity 0.4s; }
-.nickname-input::-moz-placeholder { -moz-transition: opacity 0.4s; }
-.nickname-input:-ms-input-placeholder { -ms-transition: opacity 0.4s; }
-
-.nickname-input:focus::-webkit-input-placeholder { opacity: 0; }
-.nickname-input:focus:-moz-placeholder { opacity: 0; }
-.nickname-input:focus::-moz-placeholder { opacity: 0; }
-.nickname-input:focus:-ms-input-placeholder { opacity: 0; }
-
-.nickname-input-d::-webkit-input-placeholder { opacity: 0; }
-.nickname-input-d:-moz-placeholder { opacity: 0; }
-.nickname-input-d::-moz-placeholder { opacity: 0; }
-.nickname-input-d:-ms-input-placeholder { opacity: 0; }
-
-.nickname-header,
-.nickname-nickname {
-	transition: transform 0.8s ease-out, opacity 0.8s ease-out;
-	-webkit-transition: transform 0.8s ease-out, opacity 0.8s ease-out;
-}
-
-.nickname-nickname {
-	transition-delay: 0.2s;
-}
-
-.nickname-loading {
-	transform: translate(0, -20px);
-	-webkit-transform: translate(0, -20px);
-	opacity: 0;
-}
-
-.nickname-loader {
-	position: absolute;
-	left: 50%;
-	top: 48px;
-	transform: translate(-50%, 0) rotate(0deg);
-	-webkit-transform: translate(-50%, 0);
-	width: 25px;
-	height: 25px;
-	border: 6px solid #111;
-	border-radius: 50%;
-	border-top-color: #1e1;
-	animation: wheel-spin 2s linear infinite;
-	opacity: 0;
-	transition: border-top-color 0.5s, opacity 0.4s;
-	-webkit-transition: border-top-color 0.5s, opacity 0.4s;
-	transition-delay: 0.56s;
-}
-
-@keyframes wheel-spin {
-	0% {
-		transform: translate(-50%, 0) rotate(0deg);
-		-webkit-transform: translate(-50%, 0) rotate(0deg);
-		border-top-color: #1e1;
-	}
-	33% {
-		transform: translate(-50%, 0) rotate(360deg);
-                -webkit-transform: translate(-50%, 0) rotate(360deg);
-                border-top-color: #11e;
-	}
-	67% {
-                transform: translate(-50%, 0) rotate(720deg);
-                -webkit-transform: translate(-50%, 0) rotate(720deg);
-                border-top-color: #e11;
-        }
-	100% {
-                transform: translate(-50%, 0) rotate(360deg);
-                -webkit-transform: translate(-50%, 0) rotate(1080deg);
-                border-top-color: #1e1;
-        }
-}
-
-.nickname-error {
-	color: #f22;
-	font-size: 16px;
-	text-align: center;
-	padding: 5px;
-	opacity: 0;
-	transition: opacity 0.4s;
-	-webkit-transition: opacity 0.4s;
-}
-
-.nickname-error-e {
-	opacity: 1;
 }
 
 </style>
@@ -208,127 +23,16 @@ body {
 
 $(function()
 {
-	initNickname();
-});
-
-function initMessages()
-{
-	
-}
-
-function initNickname()
-{
-	var valid = true;
-	var socket = io();
-
-
-	function setError(mes)
-	{
-        	$(".nickname-error").html(mes);
-        	$(".nickname-error").addClass("nickname-error-e");
-        	setTimeout(function() { $(".nickname-error").removeClass("nickname-error-e"); }, 10000);
-	}
-
-	$(".nickname-loading").removeClass("nickname-loading");
-
-	function checkValid()
-	{
-		socket.emit("checkmesreq", $(".nickname-input").val());
-
-		socket.on("checkmesres", function(res) {
-			valid = res;
-		});
-	}
-
-	$(".nickname-input").keypress(function(e)
-	{
-		if(e.which == 13)
-		{
-			e.preventDefault();
-
-			if($(this).val() === "")
-				setError("Please enter a nickname");
-			else if($(this).val().length < 3)
-                                setError("No less than 3 characters");
-			else if($(this).val().length >= 16)
-			{
-				$(this).val($(this).val().substr(0, 16));
-
-				setError("No greater than 16 characters");
-			}
-			else
-			{
-				$(this).addClass("nickname-input-d");
-				$(this).trigger("blur");
-				$(".nickname-error").removeClass("nickname-error-e");
-				
-				socket.emit("login", $(this).val());
-
-				var self = $(this);
-				socket.on("login", function(res) {
-					switch(res) {
-					case 0:
-						$("body").removeClass("body-nickname");
-						$("body").addClass("body-transition");
-						setTimeout(function()
-						{
-							$("body").removeClass("body-transition");
-							initMessages();
-						}, 1000);
-						break;
-					case 1:
-						setError("That nickname has already been taken");
-                                               	self.removeClass("nickname-input-d");
-                                            	self.trigger("focus");
-						break;
-					case 2:
-						setError("Whoops! There was an error. Please try again");
-                                               	self.removeClass("nickname-input-d");
-                                               	self.trigger("focus");
-					}
-				});
-			}
-		}
-		else
-		{
-			if($(this).val().length >= 16)
-			{
-				e.preventDefault();
-
-				$(this).val($(this).val().substr(0, 16));
-
-				setError("No greater than 16 characters");
-			}
-			else
-				$(".nickname-error").removeClass("nickname-error-e");
-		}
-	});
-
-	$(".nickname-input").blur(function()
-	{
-		if(!$(this).val().length)
-			$(".nickname-input-bord").addClass("nickname-input-bord-h");
-	});		
-
-	$(".nickname-input").focus(function()
+	$(".input-h").mouseover(function()
         {
-        	$(".nickname-input-bord").removeClass("nickname-input-bord-h");
+                var self = $(this);
+                var id = setTimeout(function() { self.trigger("focus"); }, 50);
+
+                $(this).mouseleave(function() { clearTimeout(id); });
         });
 
-	$(".nickname-input").mouseover(function()
-	{
-		var self = $(this);
-		var id = setTimeout(function() { self.trigger("focus"); }, 50);
-	
-		$(this).mouseleave(function() { clearTimeout(id); });
-	});
-
-	$(".nickname-input").keydown(function(e)
-	{
-		if(e.which == 8)
-			$(".nickname-error").removeClass("nickname-error-e");
-	});
-}
+	initNickname();
+});
 
 </script>
 
@@ -336,10 +40,15 @@ function initNickname()
 
 <body class="body-nickname">
 	<div class="messages-main">
+		<div class="messages-tab"></div>
 		<div class="messages-cont">
-			
-		</div>
-		<div class="messages-tab">
+			<div class="message-list-wrap">
+				<ul class="messages-list">
+				</ul>
+			</div>
+			<div class="messages-form">
+				<input type="text" class="messages-input input-h" placeholder="Send a message" autofocus></input>
+			</div>
 		</div>
 	</div>
 	<div class="nickname-main">
@@ -348,9 +57,8 @@ function initNickname()
 				<span class="nickname-choose">Welcome! Choose A Nickname</span>
 			</div>
 			<div class="nickname-nickname nickname-loading">
-				<input type="text" class="nickname-input" placeholder="Your nickname" autofocus>
-					<div class="nickname-loader"></div>
-				</input>
+				<input type="text" class="nickname-input input-h" placeholder="Your nickname" autofocus></input>
+				<div class="nickname-loader"></div>
 				<div class="nickname-input-bord"></div>
 				<div class="nickname-error">No greater than 16 characters</div>
 			</div>

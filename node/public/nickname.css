@@ -1,0 +1,181 @@
+.body-nickname {
+        overflow: hidden;
+}
+
+.nickname-main {
+        position: fixed;
+        background-color: #111;
+        width: 100%;
+        height: 100%;
+        z-index: 999;
+        display: none;
+        opacity: 0;
+        transition: opacity 1s;
+        -webkit-transition: opacity 1s;
+}
+
+.body-nickname .nickname-main {
+        display: block;
+        opacity: 1;
+}
+
+.body-transition .nickname-main {
+        display: block;
+        opacity: 0;
+}
+
+.nickname-form {
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 300px;
+        width: 550px;
+        height: auto;
+}
+
+.nickname-header {
+        padding: 20px;
+        text-align: center;
+}
+
+.nickname-choose {
+        color: #efffef;
+        font-size: 40px;
+        font-weight: 200;
+}
+
+.nickname-nickname {
+        padding: 30px 60px;
+        position: relative;
+}
+
+.nickname-input {
+        width: 92%;
+        padding: 4%;
+        font-size: 25px;
+        border: none;
+        color: #eee;
+        outline: none;
+        text-align: center;
+        background-color: #111;
+        transition: opacity 0.4s;
+        -webkit-transition: opacity 0.4s;
+}
+
+.nickname-input-bord {
+        background-color: purple;
+        height: 6px;
+        width: 70%;
+        margin-left: 15%;
+        transition: width 0.4s ease-in-out, margin 0.4s ease-in-out;
+        -webkit-transition: width 0.4s ease-in-out, margin 0.4s ease-in-out;
+        transition-delay: 0.2s;
+}
+
+.nickname-input:hover {
+        cursor: text;
+}
+
+.nickname-input-bord-h {
+        width: 0%;
+        margin-left: 50%;
+}
+
+.nickname-input-d {
+        opacity: 0;
+}
+
+.nickname-input-d + .nickname-loader {
+        opacity: 1;
+}
+
+.nickname-input-d ~ .nickname-input-bord {
+        width: 0%;
+        margin-left: 50%;
+}
+
+.nickname-input:focus ~ .nickname-input-bord {
+        width: 94%;
+        margin-left: 3%;
+}
+
+.nickname-input-d:focus ~ .nickname-input-bord {
+        width: 0%;
+        margin-left: 50%;
+}
+
+.nickname-input-d::-webkit-input-placeholder { opacity: 0; }
+.nickname-input-d:-moz-placeholder { opacity: 0; }
+.nickname-input-d::-moz-placeholder { opacity: 0; }
+.nickname-input-d:-ms-input-placeholder { opacity: 0; }
+
+.nickname-header,
+.nickname-nickname {
+        transition: transform 0.8s ease-out, opacity 0.8s ease-out;
+        -webkit-transition: transform 0.8s ease-out, opacity 0.8s ease-out;
+}
+
+.nickname-nickname {
+        transition-delay: 0.2s;
+}
+
+.nickname-loading {
+        transform: translate(0, -20px);
+        -webkit-transform: translate(0, -20px);
+        opacity: 0;
+}
+
+.nickname-loader {
+        position: absolute;
+        left: 50%;
+        top: 48px;
+        transform: translate(-50%, 0) rotate(0deg);
+        -webkit-transform: translate(-50%, 0);
+        width: 25px;
+        height: 25px;
+        border: 6px solid #111;
+        border-radius: 50%;
+        border-top-color: #1e1;
+        animation: wheel-spin 2s linear infinite;
+        opacity: 0;
+        transition: border-top-color 0.5s, opacity 0.4s;
+        -webkit-transition: border-top-color 0.5s, opacity 0.4s;
+        transition-delay: 0.56s;
+}
+
+@keyframes wheel-spin {
+        0% {
+                transform: translate(-50%, 0) rotate(0deg);
+                -webkit-transform: translate(-50%, 0) rotate(0deg);
+                border-top-color: #1e1;
+        }
+        33% {
+                transform: translate(-50%, 0) rotate(360deg);
+                -webkit-transform: translate(-50%, 0) rotate(360deg);
+                border-top-color: #11e;
+        }
+        67% {
+                transform: translate(-50%, 0) rotate(720deg);
+                -webkit-transform: translate(-50%, 0) rotate(720deg);
+                border-top-color: #e11;
+        }
+        100% {
+                transform: translate(-50%, 0) rotate(360deg);
+                -webkit-transform: translate(-50%, 0) rotate(1080deg);
+                border-top-color: #1e1;
+        }
+}
+
+.nickname-error {
+        color: #f22;
+        font-size: 16px;
+        text-align: center;
+        padding: 5px;
+        opacity: 0;
+        transition: opacity 0.4s;
+        -webkit-transition: opacity 0.4s;
+}
+
+.nickname-error-e {
+        opacity: 1;
+}
+

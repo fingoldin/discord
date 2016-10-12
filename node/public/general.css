@@ -1,0 +1,9 @@
+.input-h::-webkit-input-placeholder { -webkit-transition: opacity 0.4s; }
+.input-h:-moz-placeholder { -moz-transition: opacity 0.4s; }
+.input-h::-moz-placeholder { -moz-transition: opacity 0.4s; }
+.input-h:-ms-input-placeholder { -ms-transition: opacity 0.4s; }
+
+.input-h:focus::-webkit-input-placeholder { opacity: 0; }
+.input-h:focus:-moz-placeholder { opacity: 0; }
+.input-h:focus::-moz-placeholder { opacity: 0; }
+.input-h:focus:-ms-input-placeholder { opacity: 0; }
