@@ -252,10 +252,10 @@ $(function()
 				$(this).trigger("blur");
 				$(".nickname-error").removeClass("nickname-error-e");
 				
-				socket.emit("checkmesreq", $(this).val());
+				socket.emit("login", $(this).val());
 
 				var self = $(this);
-				socket.on("checkmesres", function(res) {
+				socket.on("login", function(res) {
 					if(!res)
 					{
 						setError("That nickname has already been taken");
