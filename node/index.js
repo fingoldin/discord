@@ -37,28 +37,49 @@ io.on("connection", function(socket) {
 	{
 		dbconn.query("SELECT UID FROM ausers WHERE nickname='" + nickname + "';", function(err, result)
 		{
-			if(err) throw err;
-
-			if(result.length == 0)
+			if(err)
+			{
+				console.log(err);
+				io.emit("login", 2);
+			}
+			else if(result.length == 0)
 			{
 				dbconn.query("INSERT INTO ausers SET nickname='" + nickname + "';", function(err1, result1)
 				{
-					if(err1) throw err1;
-
-					UID = result1.insertId;
-
-					dbconn.query("INSERT INTO cusers SET UID=" + UID + ";", function(err2, result2)
+					if(err1)
 					{
-						if(err2) throw err2;
+						console.log(err1);
+						io.emit("login", 2);
+					}
+					else
+					{
+						UID = result1.insertId;
 
-						dbconn.query("INSERT INTO logins SET UID=" + UID + ", time=NOW(4);", function(err3, results3)
-                                                {
-                                                        if(err3) throw err3;
-
-                                                	io.emit("login", true);
-							console.log("A user logged in with id = " + UID);
-                                                });
-					});
+						dbconn.query("INSERT INTO cusers SET UID=" + UID + ";", function(err2, result2)
+						{
+							if(err2)
+							{
+								console.log(err2);
+								io.emit("login", 2);
+							}
+							else
+							{
+								dbconn.query("INSERT INTO logins SET UID=" + UID + ", time=NOW(4);", function(err3, results3)
+                                                		{
+                                                        		if(err3)
+									{
+										console.log(err3);
+										io.emit("login", 2);
+									}
+									else
+									{
+                                                				io.emit("login", 0);
+										console.log("A user logged in with id = " + UID);
+                                                			}
+								});
+							}
+						});
+					}
 				});
 			}
 			else
@@ -67,25 +88,40 @@ io.on("connection", function(socket) {
 
 				dbconn.query("SELECT COUNT(*) AS res FROM cusers WHERE UID=" + UID + ";", function(err1, result1)
 				{
-					if(err1) throw err1;
-
-					if(result1[0].res == 0)
+					if(err1)
+					{
+						console.log(err1);
+						io.emit("login", 2);
+					}
+					else if(result1[0].res == 0)
 					{
 						dbconn.query("INSERT INTO cusers SET UID=" + UID + ";", function(err2, result2)
                                         	{
-                                                	if(err2) throw err2;
-
-							dbconn.query("INSERT INTO logins SET UID=" + UID + ", time=NOW(4);", function(err3, results3)
+                                                	if(err2)
 							{
-								if(err3) throw err3;
-
-	                                                	io.emit("login", true);
-								console.log("A user logged in with id = " + UID);
-        						});
+								console.log(err2);
+								io.emit("login", 2);
+							}
+							else
+							{
+								dbconn.query("INSERT INTO logins SET UID=" + UID + ", time=NOW(4);", function(err3, results3)
+								{
+									if(err3)
+									{
+										console.log(err3);
+										io.emit("login", 2);
+									}
+									else
+									{
+	                                                			io.emit("login", 0);
+										console.log("A user logged in with id = " + UID);
+        								}
+								});
+							}
 	                                	});
 					}
 					else
-						io.emit("login", false);	
+						io.emit("login", 1);
 				});
 			}
 		});
@@ -97,14 +133,20 @@ io.on("connection", function(socket) {
 		{
 			dbconn.query("DELETE FROM cusers WHERE UID=" + UID + ";", function(err, result)
 			{
-				if(err) throw err;
-
-				dbconn.query("INSERT INTO logoffs SET UID=" + UID + ", time=NOW(4);", function(err1, result1)
+				if(err)
 				{
-					if(err1) throw err1;
-
-					console.log("A user logged out with id = " + UID);
-				});
+					console.log(err);
+				}
+				else
+				{
+					dbconn.query("INSERT INTO logoffs SET UID=" + UID + ", time=NOW(4);", function(err1, result1)
+					{
+						if(err1)
+							console.log(err1);
+						else
+							console.log("A user logged out with id = " + UID);
+					});
+				}
 			});
 		}
 

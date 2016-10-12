@@ -206,18 +206,28 @@ body {
 
 <script type="text/javascript">
 
-function setError(mes)
+$(function()
 {
-	$(".nickname-error").html(mes);
-        $(".nickname-error").addClass("nickname-error-e");
-        setTimeout(function() { $(".nickname-error").removeClass("nickname-error-e"); }, 10000);
+	initNickname();
+});
+
+function initMessages()
+{
+	
 }
 
-$(function()
+function initNickname()
 {
 	var valid = true;
 	var socket = io();
 
+
+	function setError(mes)
+	{
+        	$(".nickname-error").html(mes);
+        	$(".nickname-error").addClass("nickname-error-e");
+        	setTimeout(function() { $(".nickname-error").removeClass("nickname-error-e"); }, 10000);
+	}
 
 	$(".nickname-loading").removeClass("nickname-loading");
 
@@ -256,17 +266,25 @@ $(function()
 
 				var self = $(this);
 				socket.on("login", function(res) {
-					if(!res)
-					{
-						setError("That nickname has already been taken");
-						self.removeClass("nickname-input-d");
-						self.trigger("focus");
-					}
-					else
-					{
+					switch(res) {
+					case 0:
 						$("body").removeClass("body-nickname");
 						$("body").addClass("body-transition");
-						setTimeout(function() { $("body").removeClass("body-transition"); }, 1000);
+						setTimeout(function()
+						{
+							$("body").removeClass("body-transition");
+							initMessages();
+						}, 1000);
+						break;
+					case 1:
+						setError("That nickname has already been taken");
+                                               	self.removeClass("nickname-input-d");
+                                            	self.trigger("focus");
+						break;
+					case 2:
+						setError("Whoops! There was an error. Please try again");
+                                               	self.removeClass("nickname-input-d");
+                                               	self.trigger("focus");
 					}
 				});
 			}
@@ -310,13 +328,20 @@ $(function()
 		if(e.which == 8)
 			$(".nickname-error").removeClass("nickname-error-e");
 	});
-});
+}
 
 </script>
 
 </head>
 
 <body class="body-nickname">
+	<div class="messages-main">
+		<div class="messages-cont">
+			
+		</div>
+		<div class="messages-tab">
+		</div>
+	</div>
 	<div class="nickname-main">
 		<div class="nickname-form">
 			<div class="nickname-header nickname-loading">
