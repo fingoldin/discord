@@ -17,7 +17,6 @@ var dbconn = mysql.createConnection({
 });
 dbconn.connect();
 
-
 var lPort = 2000;
 
 app.get("/", function(req, res)
@@ -30,10 +29,13 @@ http.listen(lPort, function()
 	console.log("Listening on port: " + lPort);
 });
 
+var cusers = [];
+
 io.on("connection", function(socket) {
 	console.log("A user connected");
 
 	var UID = 0;
+	var name = "";
 
 	socket.on("login", function(nickname)
 	{
@@ -42,7 +44,7 @@ io.on("connection", function(socket) {
 			if(err)
 			{
 				console.log(err);
-				io.emit("login", 2);
+				socket.emit("login", 2);
 			}
 			else if(result.length == 0)
 			{
@@ -51,34 +53,25 @@ io.on("connection", function(socket) {
 					if(err1)
 					{
 						console.log(err1);
-						io.emit("login", 2);
+						socket.emit("login", 2);
 					}
 					else
 					{
 						UID = result1.insertId;
 
-						dbconn.query("INSERT INTO cusers SET UID=" + UID + ";", function(err2, result2)
-						{
-							if(err2)
+						dbconn.query("INSERT INTO logins SET UID=" + UID + ", time=NOW(4);", function(err3, results3)
+                                                {
+                                                       	if(err3)
 							{
-								console.log(err2);
-								io.emit("login", 2);
+								console.log(err3);
+								socket.emit("login", 2);	
 							}
 							else
 							{
-								dbconn.query("INSERT INTO logins SET UID=" + UID + ", time=NOW(4);", function(err3, results3)
-                                                		{
-                                                        		if(err3)
-									{
-										console.log(err3);
-										io.emit("login", 2);
-									}
-									else
-									{
-                                                				io.emit("login", 0);
-										console.log("A user logged in with id = " + UID);
-                                                			}
-								});
+								cusers.push(UID);
+                                				socket.emit("login", 0);
+                                				name = nickname;
+                                				console.log("A user logged in with id = " + UID);
 							}
 						});
 					}
@@ -88,43 +81,25 @@ io.on("connection", function(socket) {
 			{
 				UID = result[0].UID;
 
-				dbconn.query("SELECT COUNT(*) AS res FROM cusers WHERE UID=" + UID + ";", function(err1, result1)
+				if(cusers.indexOf(UID) == -1)
 				{
-					if(err1)
+					dbconn.query("INSERT INTO logins SET UID=" + UID + ", time=NOW(4);", function(err3, results3)
 					{
-						console.log(err1);
-						io.emit("login", 2);
-					}
-					else if(result1[0].res == 0)
-					{
-						dbconn.query("INSERT INTO cusers SET UID=" + UID + ";", function(err2, result2)
-                                        	{
-                                                	if(err2)
-							{
-								console.log(err2);
-								io.emit("login", 2);
-							}
-							else
-							{
-								dbconn.query("INSERT INTO logins SET UID=" + UID + ", time=NOW(4);", function(err3, results3)
-								{
-									if(err3)
-									{
-										console.log(err3);
-										io.emit("login", 2);
-									}
-									else
-									{
-	                                                			io.emit("login", 0);
-										console.log("A user logged in with id = " + UID);
-        								}
-								});
-							}
-	                                	});
-					}
-					else
-						io.emit("login", 1);
-				});
+						if(err3)
+						{
+							console.log(err3);
+							socket.emit("login", 2);
+						}
+						else
+						{
+	                                               	socket.emit("login", 0);
+							name = nickname;
+							console.log("A user logged in with id = " + UID);
+        					}
+					});
+				}
+				else
+					socket.emit("login", 1);
 			}
 		});
 	});
@@ -133,25 +108,44 @@ io.on("connection", function(socket) {
 	{
 		if(UID)
 		{
-			dbconn.query("DELETE FROM cusers WHERE UID=" + UID + ";", function(err, result)
+			
+
+			dbconn.query("INSERT INTO logoffs SET UID=" + UID + ", time=NOW(4);", function(err, result)
 			{
 				if(err)
-				{
 					console.log(err);
-				}
 				else
-				{
-					dbconn.query("INSERT INTO logoffs SET UID=" + UID + ", time=NOW(4);", function(err1, result1)
-					{
-						if(err1)
-							console.log(err1);
-						else
-							console.log("A user logged out with id = " + UID);
-					});
-				}
+					console.log("A user logged out with id = " + UID);
 			});
 		}
 
 		console.log("A user disconnected");
+	});
+
+	socket.on("message", function(data) {
+		if(name !== "")
+		{
+			socket.broadcast.emit("message", { name: name, text: data.text });
+                        socket.emit("messagesent", data.tid);
+
+			dbconn.query("INSERT INTO messages SET UID=" + UID + ", text='" + data.text + "', time=NOW(4);", function(err, result)
+			{
+				if(err)
+					console.log(err);
+			});
+		}
+	});
+
+	socket.on("getmessages", function(n) {
+		dbconn.query("SELECT a.text as text, b.nickname as name FROM messages a, ausers b WHERE a.UID=b.UID ORDER BY a.time DESC LIMIT " + n + ";", function(err, result)
+		{
+			if(err)
+			{
+				console.log(err);
+				socket.emit("getmessages", { success: 0, result: 0 });
+			}
+			else
+				socket.emit("getmessages", { success: 1, result: JSON.stringify(result) });
+		});
 	});
 });

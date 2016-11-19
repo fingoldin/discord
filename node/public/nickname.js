@@ -1,8 +1,6 @@
-function initNickname()
+function initNickname(socket)
 {
         var valid = true;
-        var socket = io();
-
 
         function setError(mes)
         {
@@ -34,12 +32,14 @@ function initNickname()
                                 setError("Please enter a nickname");
                         else if(name.length < 3)
                                 setError("No less than 3 characters");
-                        else if(name.length >= 16)
+                        else if(name.length >= 30)
                         {
-                                $(this).val(name.substr(0, 16));
+                                $(this).val(name.substr(0, 30));
 
-                                setError("No greater than 16 characters");
+                                setError("No greater than 30 characters");
                         }
+			else if(!alphaNumeric(name))
+				setError("Only letters and numbers");
                         else
                         {
                                 $(this).addClass("nickname-input-d");
@@ -58,8 +58,8 @@ function initNickname()
                                                 setTimeout(function()
                                                 {
                                                         $("body").removeClass("body-transition");
-						        initMessages(name);
-                                                }, 1000);
+						        initMessages(name, socket);
+                                                }, 400);
                                                 break;
                                         case 1:
                                                 setError("That nickname has already been taken");
@@ -76,13 +76,11 @@ function initNickname()
                 }
                 else
                 {
-                        if($(this).val().length >= 16)
+                        if($(this).val().length >= 30)
                         {
-                                e.preventDefault();
+                                $(this).val($(this).val().substr(0, 30));
 
-                                $(this).val($(this).val().substr(0, 16));
-
-                                setError("No greater than 16 characters");
+                                setError("No greater than 30 characters");
                         }
                         else
                                 $(".nickname-error").removeClass("nickname-error-e");

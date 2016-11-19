@@ -4,17 +4,25 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script src="/socket.io/socket.io.js"></script>
+
+<script src="/jquery.mousewheel.js"></script>
+<script src="/mwheelIntent.js"></script>
+<script src="/perfect-scrollbar/js/perfect-scrollbar.jquery.min.js"></script>
+<script src="/general.js"></script>
+<script src="/scrollbar.min.js"></script>
 <script src="/nickname.js"></script>
 <script src="/messages.js"></script>
 
+<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet"> 
+<link rel="stylesheet" type="text/css" href="/perfect-scrollbar/css/perfect-scrollbar.min.css"></link>
+<link rel="stylesheet" type="text/css" href="/general.css"></link>
 <link rel="stylesheet" type="text/css" href="/nickname.css"></link>
 <link rel="stylesheet" type="text/css" href="/messages.css"></link>
-<link rel="stylesheet" type="text/css" href="/general.css"></link>
 
 <style>
 
-body {
-	margin: 0;
+.typing-list {
+	display: none;
 }
 
 </style>
@@ -23,6 +31,8 @@ body {
 
 $(function()
 {
+	var socket = io();
+
 	$(".input-h").mouseover(function()
         {
                 var self = $(this);
@@ -31,7 +41,7 @@ $(function()
                 $(this).mouseleave(function() { clearTimeout(id); });
         });
 
-	initNickname();
+	initNickname(socket);
 });
 
 </script>
@@ -42,9 +52,20 @@ $(function()
 	<div class="messages-main">
 		<div class="messages-tab"></div>
 		<div class="messages-cont">
-			<div class="message-list-wrap">
-				<ul class="messages-list">
-				</ul>
+			<div class="wheel-loader message-loader"></div>
+			<div class="message-list-wrap message-list-disabled">
+				<div class="message-list-scroll scrollbox">
+					<ul class="messages-list">
+       	        	       	        </ul>
+					<ul class="typing-list">
+       	                       	        	<li class="typing-li">
+       	                               	   		<div class="typing-pic"><img src="http://az616578.vo.msecnd.net/files/2016/07/23/6360489455192162291563850737_Trump.jpg"></img></div>
+							<div class="typing-body">
+								<span class="typing-name">Fingoldin</span>
+       	         	                	       	</div>
+						</li>
+       	                         	</ul>
+				</div>
 			</div>
 			<div class="messages-form">
 				<input type="text" class="messages-input input-h" placeholder="Send a message" autofocus></input>
@@ -52,15 +73,17 @@ $(function()
 		</div>
 	</div>
 	<div class="nickname-main">
-		<div class="nickname-form">
-			<div class="nickname-header nickname-loading">
-				<span class="nickname-choose">Welcome! Choose A Nickname</span>
-			</div>
-			<div class="nickname-nickname nickname-loading">
-				<input type="text" class="nickname-input input-h" placeholder="Your nickname" autofocus></input>
-				<div class="nickname-loader"></div>
-				<div class="nickname-input-bord"></div>
-				<div class="nickname-error">No greater than 16 characters</div>
+		<div class="nickname-main-wrapper">
+			<div class="nickname-form">
+				<div class="nickname-header nickname-loading">
+					<span class="nickname-choose">Welcome! Choose A Nickname</span>
+				</div>
+				<div class="nickname-nickname nickname-loading">
+					<input type="text" class="nickname-input input-h" placeholder="Your nickname"></input>
+					<div class="wheel-loader"></div>
+					<div class="nickname-input-bord"></div>
+					<div class="nickname-error">No greater than 30 characters</div>
+				</div>
 			</div>
 		</div>
 	</div>

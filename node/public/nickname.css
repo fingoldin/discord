@@ -10,31 +10,53 @@
         z-index: 999;
         display: none;
         opacity: 0;
-        transition: opacity 1s;
-        -webkit-transition: opacity 1s;
+        transition: opacity 0.4s;
+        -webkit-transition: opacity 0.4s;
+	-webkit-flex-direction: column;
+	flex-direction: column;
+	-webkit-justify-content: center;
+	justify-content: center;
+	-webkit-align-items: center;
+	align-items: center;
+}
+
+.nickname-main-wrapper {
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex: 1 1 auto;
+	flex: 1 1 auto;
+	-webkit-justify-content: center;
+        justify-content: center;
+        -webkit-align-items: center;
+        align-items: center;
+	-webkit-flex-direction: column;
+        flex-direction: column;
+	width: 100%;
 }
 
 .body-nickname .nickname-main {
-        display: block;
+	display: -webkit-flex;
+        display: flex;
         opacity: 1;
 }
 
 .body-transition .nickname-main {
-        display: block;
+	display: -webkit-flex;
+        display: flex;
         opacity: 0;
 }
 
 .nickname-form {
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 300px;
-        width: 550px;
+	-webkit-flex: 0 0 auto;
+	flex: 0 0 auto;
+        width: auto;
         height: auto;
 }
 
 .nickname-header {
-        padding: 20px;
+        padding: 0;
         text-align: center;
+	white-space: nowrap;
 }
 
 .nickname-choose {
@@ -44,13 +66,17 @@
 }
 
 .nickname-nickname {
-        padding: 30px 60px;
+        padding: 30px 80px;
         position: relative;
+	max-width: 550px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .nickname-input {
         width: 92%;
-        padding: 4%;
+	margin: 0 4%;
+        padding: 15px;
         font-size: 25px;
         border: none;
         color: #eee;
@@ -122,47 +148,6 @@
         transform: translate(0, -20px);
         -webkit-transform: translate(0, -20px);
         opacity: 0;
-}
-
-.nickname-loader {
-        position: absolute;
-        left: 50%;
-        top: 48px;
-        transform: translate(-50%, 0) rotate(0deg);
-        -webkit-transform: translate(-50%, 0);
-        width: 25px;
-        height: 25px;
-        border: 6px solid #111;
-        border-radius: 50%;
-        border-top-color: #1e1;
-        animation: wheel-spin 2s linear infinite;
-        opacity: 0;
-        transition: border-top-color 0.5s, opacity 0.4s;
-        -webkit-transition: border-top-color 0.5s, opacity 0.4s;
-        transition-delay: 0.56s;
-}
-
-@keyframes wheel-spin {
-        0% {
-                transform: translate(-50%, 0) rotate(0deg);
-                -webkit-transform: translate(-50%, 0) rotate(0deg);
-                border-top-color: #1e1;
-        }
-        33% {
-                transform: translate(-50%, 0) rotate(360deg);
-                -webkit-transform: translate(-50%, 0) rotate(360deg);
-                border-top-color: #11e;
-        }
-        67% {
-                transform: translate(-50%, 0) rotate(720deg);
-                -webkit-transform: translate(-50%, 0) rotate(720deg);
-                border-top-color: #e11;
-        }
-        100% {
-                transform: translate(-50%, 0) rotate(360deg);
-                -webkit-transform: translate(-50%, 0) rotate(1080deg);
-                border-top-color: #1e1;
-        }
 }
 
 .nickname-error {

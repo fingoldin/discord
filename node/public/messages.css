@@ -1,3 +1,7 @@
+div {
+	display: block;
+}
+
 .messages-main {
 	position: fixed;
 	left: 0;
@@ -5,57 +9,104 @@
 	width: 100%;
 	height: 100%;
 	background-color: #222;
-	display: table;
-	table-layout: fixed;
+	display: -webkit-flex;
+	display: flex;
 }
 
-.body-nickname .messages-main {
+.body-nickname .message-main {
 	display: none;
 }
 
 .messages-tab, .messages-cont {
-	display: table-cell;
 	overflow: hidden;
 }
 
 .messages-tab {
-	width: 400px;
-	height: 100%;
+	width: 100px;
+	-webkit-flex: 0 1 auto;
+	flex: 0 1 auto;
 	background-color: #1d1d1d;
 	border-right: 2px solid #000;
 	z-index: 10;
 }
 
 .messages-cont {
-	width: 100%;
-	height: 100%;
+	-webkit-flex: 1;
+	flex: 1;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex-direction: column;
+	flex-direction: column;
 	z-index: 5;
 	background-color: #222;
-	padding: 30px;
-	padding-bottom: 55px;
-	position: relative;
-}
-
-.messages-form, .messages-input, .message-list-wrap, .messages-cont {
-	box-sizing: border-box;
-        -moz-box-sizing: border-box;
-        -webkit-box-sizing: border-box;
 }
 
 .messages-form {
-	position: absolute;
 	width: 100%;
-	height: auto;
-	left: 0;
-	bottom: 0;
+	-webkit-flex: 0 0 auto;
+	flex: 0 0 auto;
 	padding: 2px;
 	padding-right: 1px;
+}
+
+.typing-list {
+	list-style-type: none;
+	margin: 0;
+	padding: 10px;
+}
+
+.typing-li {
+	display: table;
+	table-layout: fixed;
+}
+
+.typing-pic, .typing-body {
+	display: table-cell;
+	overflow: hidden;
+}
+
+.typing-pic {
+	width: 40px;
+	vertical-align: middle;
+}
+
+.typing-pic img {
+	border-radius: 50%;
+	width: 35px;
+	height: 35px;
+}
+
+.typing-body {
+	vertical-align: middle;
+}
+
+.typing-name {
+	color: #eee;
+	font-size: 16px;
+	line-height: 100%;
+}
+
+.typing-name:after {
+	content: "";
+	font-size: 24px;
+	animation: typing-anim 0.8s linear infinite;
+}
+
+@keyframes typing-anim {
+        0% { content: ""; }
+	16.667% { content: "\00a0."; }
+	33.333% { content: "\00a0.."; }
+	50% { content: "\00a0..."; }
+	66.667% { content: "\00a0\00a0.."; }
+	83.333% { content: "\00a0\00a0\00a0."; }
+	100% { content: ""; }
 }
 
 .messages-input {
 	padding: 12px;
 	text-align: left;
 	font-size: 22px;
+	line-height: 30px;
 	width: 100%;
 	border: 1px solid #666;
 	background-color: #0d0d0d;
@@ -69,11 +120,23 @@
 }
 
 .message-list-wrap {
-	overflow-x: hidden;
-	overflow-y: auto;
+	display: -webkit-flex;
+	display: flex;
+	-webkit-flex: 1;
+	flex: 1;
 	width: 100%;
-	height: 100%;
-	padding: 5px;
+	padding: 15px;
+	z-index: 8;
+	overflow: hidden;
+}
+
+.message-list-scroll {
+	-webkit-flex: 1;
+	flex: 1;
+}
+
+.message-list-disabled {
+	opacity: 0;
 }
 
 .messages-list {
@@ -85,9 +148,14 @@
 .message-li {
 	display: block;
 	height: auto;
-	margin-top: 15px;
-	margin-bottom: 15px;
-}	
+	padding-top: 15px;
+	padding-bottom: 15px;
+	border-top: 1px solid #333;
+}
+
+.message-li:first-child {
+	border: none;
+}
 
 .message-li, .message-text {
 	transition: opacity 0.5s ease-out, transform 0.5s ease-out;
@@ -101,7 +169,8 @@
 
 .message-profile {
 	padding: 10px;
-	vertical-align: top;
+	-webkit-flex: 0 0 auto;
+	flex: 0 0 auto;
 	width: 60px;
 }
 
@@ -112,19 +181,24 @@
 }
 
 .message-wrapper {
-	display: table;
+	display: -webkit-flex;
+	display: flex;
 	width: 100%;
-	table-layout: fixed;
 }
 
 .message-body, .message-profile {
-	display: table-cell;
 	overflow: hidden;
+}
+
+.message-profile {
+	-webkit-flex: 0 0 auto;
+	flex: 0 0 auto;
 }
 
 .message-body {
 	padding: 10px;
-	width: 100%;
+	-webkit-flex: 1;
+	flex: 1;
 }
 
 .message-name, .message-text {
@@ -133,14 +207,32 @@
 
 .message-name {
 	color: #eee;
-	font-size: 22px;
+	font-size: 20px;
 	font-weight: 700;
 	margin-bottom: 10px;
 }
 
 .message-text {
 	color: #aaa;
-	font-size: 18px;
+	font-size: 16px;
 	word-wrap: break-word;
-	margin-top: 15px;
+	margin-top: 10px;
+}
+
+.message-text-sending {
+	color: #666;
+}
+
+.message-loader {
+	background-color: #222;
+	width: 60px;
+	height: 60px;
+	top: 30%;
+	opacity: 0;
+	transition: opacity 0.5s;
+	-webkit-transition: opacity 0.5s;
+}
+
+.message-loader-e {
+	opacity: 1;
 }
