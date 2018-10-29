@@ -1,5 +1,5 @@
 # discord
-A discord-style messaging app
+A discord-style messaging app, made with Node.js
 
 ## Screenshots
 
